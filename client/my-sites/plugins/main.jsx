@@ -44,6 +44,7 @@ import {
 	getSelectedSiteId,
 	getSelectedSiteSlug
 } from 'state/ui/selectors';
+import { getSelectedOrAllSitesWithPlugins } from 'state/selectors';
 
 const PluginsMain = React.createClass( {
 	mixins: [ URLSearch ],
@@ -53,12 +54,10 @@ const PluginsMain = React.createClass( {
 	},
 
 	componentDidMount() {
-		this.props.sites.on( 'change', this.refreshPlugins );
 		PluginsStore.on( 'change', this.refreshPlugins );
 	},
 
 	componentWillUnmount() {
-		this.props.sites.removeListener( 'change', this.refreshPlugins );
 		PluginsStore.removeListener( 'change', this.refreshPlugins );
 	},
 
@@ -98,7 +97,7 @@ const PluginsMain = React.createClass( {
 	},
 
 	getPluginsState( nextProps ) {
-		const sites = this.props.sites.getSelectedOrAllWithPlugins(),
+		const sites = this.props.sites,
 			pluginUpdate = PluginsStore.getPlugins( sites, 'updates' );
 		return {
 			plugins: this.getPluginsFromStore( nextProps, sites ),
@@ -146,8 +145,7 @@ const PluginsMain = React.createClass( {
 	},
 
 	isFetchingPlugins() {
-		const sites = this.props.sites.getSelectedOrAllWithPlugins() || [];
-		return sites.some( PluginsStore.isFetchingSite );
+		return this.props.sites.some( PluginsStore.isFetchingSite );
 	},
 
 	getSelectedText() {
@@ -246,7 +244,7 @@ const PluginsMain = React.createClass( {
 		}
 
 		return some(
-			this.props.sites.getSelectedOrAllWithPlugins(),
+			this.props.sites,
 			site => site && this.props.isJetpackSite( site.ID ) && this.props.canJetpackSiteUpdateFiles( site.ID )
 		);
 	},
@@ -299,7 +297,6 @@ const PluginsMain = React.createClass( {
 				<PluginsList
 					header={ this.translate( 'Plugins' ) }
 					plugins={ plugins }
-					sites={ this.props.sites }
 					pluginUpdateCount={ this.state.pluginUpdateCount }
 					isPlaceholder= { this.shouldShowPluginListPlaceholders() } />
 			</div>
@@ -434,6 +431,7 @@ export default connect(
 	state => {
 		const selectedSite = getSelectedSite( state );
 		const selectedSiteId = getSelectedSiteId( state );
+		const sites = getSelectedOrAllSitesWithPlugins( state );
 		return {
 			selectedSite,
 			selectedSiteId: selectedSiteId,
@@ -447,7 +445,8 @@ export default connect(
 			isRequestingSites: isRequestingSites( state ),
 			userCanManagePlugins: ( selectedSiteId
 				? canCurrentUser( state, selectedSiteId, 'manage_options' )
-				: canCurrentUserManagePlugins( state ) )
+				: canCurrentUserManagePlugins( state ) ),
+			sites,
 		};
 	},
 	{ wporgFetchPluginData }
