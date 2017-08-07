@@ -63,7 +63,7 @@ export default class EditorSidebar extends Component {
 					onSave={ onSave }
 					isPostPrivate={ isPostPrivate }
 				/>
-				<EditorShareADraft />
+				<EditorShareADraft siteId={ site.ID } postId={ post ? post.ID : null } />
 				<SidebarFooter>
 					<EditorDeletePost
 						post={ post }
