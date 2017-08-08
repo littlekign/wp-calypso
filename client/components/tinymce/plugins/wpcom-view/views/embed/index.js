@@ -135,4 +135,9 @@ export default class EmbedViewManager extends EventEmitter {
 	getComponent() {
 		return EmbedView;
 	}
+
+	// creating this function automatically makes icon appear
+	edit( editor, content ) {
+		editor.execCommand( 'embedEditLink', content );
+	}
 }
