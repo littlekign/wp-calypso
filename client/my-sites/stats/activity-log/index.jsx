@@ -10,8 +10,9 @@ import {
 	get,
 	groupBy,
 	includes,
-	map,
 	isEmpty,
+	isNull,
+	map,
 } from 'lodash';
 
 /**
@@ -29,6 +30,7 @@ import StatsNavigation from '../stats-navigation';
 import ActivityLogConfirmDialog from '../activity-log-confirm-dialog';
 import ActivityLogDay from '../activity-log-day';
 import ActivityLogBanner from '../activity-log-banner';
+import ActivityLogEmpty from './activity-log-empty';
 import ErrorBanner from '../activity-log-banner/error-banner';
 import ProgressBanner from '../activity-log-banner/progress-banner';
 import SuccessBanner from '../activity-log-banner/success-banner';
@@ -171,7 +173,6 @@ class ActivityLog extends Component {
 		if ( ! restoreProgress ) {
 			return null;
 		}
-
 		const {
 			errorCode,
 			failureReason,
@@ -254,6 +255,10 @@ class ActivityLog extends Component {
 			startDate,
 		} = this.props;
 
+		if ( isNull( logs ) ) {
+			return null;
+		}
+
 		const disableRestore = this.isRestoreInProgress();
 
 		const applySiteOffset = this.getSiteOffsetFunc();
@@ -263,6 +268,10 @@ class ActivityLog extends Component {
 		const logsForMonth = filter( logs, ( { ts_utc } ) => {
 			return applySiteOffset( moment.utc( ts_utc ) ).format( YEAR_MONTH ) === selectedMonthAndYear;
 		} );
+
+		if ( isEmpty( logsForMonth ) ) {
+			return <ActivityLogEmpty />;
+		}
 
 		const logsGroupedByDay = map(
 			groupBy(
