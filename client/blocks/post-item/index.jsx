@@ -14,6 +14,7 @@ import { getNormalizedPost } from 'state/posts/selectors';
 import Card from 'components/card';
 import PostRelativeTime from 'blocks/post-relative-time';
 import PostStatus from 'blocks/post-status';
+import PostShare from 'blocks/post-share';
 import PostTypeListPostThumbnail from 'my-sites/post-type-list/post-thumbnail';
 import PostActionsEllipsisMenu from 'my-sites/post-type-list/post-actions-ellipsis-menu';
 import PostTypePostAuthor from 'my-sites/post-type-list/post-type-post-author';
@@ -55,9 +56,18 @@ class PostItem extends React.Component {
 				</div>
 				<PostTypeListPostThumbnail globalId={ this.props.globalId } />
 				<PostActionsEllipsisMenu globalId={ this.props.globalId } />
+				{
+					this.props.post &&
+					this.state.showShare &&
+					<PostShare
+						post={ this.props.post }
+						siteId={ this.props.post.site_ID }
+					/>
+				}
 			</Card>
 		);
 	}
+}
 
 PostItem.propTypes = {
 	translate: PropTypes.func,
