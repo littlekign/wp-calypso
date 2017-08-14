@@ -55,7 +55,7 @@ class PostItem extends React.Component {
 					</div>
 				</div>
 				<PostTypeListPostThumbnail globalId={ this.props.globalId } />
-				<PostActionsEllipsisMenu globalId={ this.props.globalId } />
+				<PostActionsEllipsisMenu globalId={ this.props.globalId } onToggleShare={ this.toggleShare } />
 				{
 					this.props.post &&
 					this.state.showShare &&
