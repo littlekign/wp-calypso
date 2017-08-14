@@ -6,7 +6,6 @@ import debugFactory from 'debug';
 import { connect } from 'react-redux';
 import { localize } from 'i18n-calypso';
 import {
-	filter,
 	get,
 	groupBy,
 	includes,
@@ -258,15 +257,9 @@ class ActivityLog extends Component {
 
 		const applySiteOffset = this.getSiteOffsetFunc();
 
-		const YEAR_MONTH = 'YYYY-MM';
-		const selectedMonthAndYear = moment( startDate ).format( YEAR_MONTH );
-		const logsForMonth = filter( logs, ( { ts_utc } ) => {
-			return applySiteOffset( moment.utc( ts_utc ) ).format( YEAR_MONTH ) === selectedMonthAndYear;
-		} );
-
 		const logsGroupedByDay = map(
 			groupBy(
-				logsForMonth,
+				logs,
 				log => applySiteOffset( moment.utc( log.ts_utc ) ).endOf( 'day' ).valueOf()
 			),
 			( daily_logs, tsEndOfSiteDay ) => (
