@@ -319,6 +319,8 @@ class ActivityLog extends Component {
 			siteId,
 			siteTitle,
 			slug,
+			startDate,
+			moment,
 		} = this.props;
 		const {
 			requestedRestoreTimestamp,
@@ -326,10 +328,13 @@ class ActivityLog extends Component {
 		} = this.state;
 		const applySiteOffset = this.getSiteOffsetFunc();
 
+		const queryStart = applySiteOffset( moment.utc( startDate ) ).startOf( 'month' ).valueOf();
+		const queryEnd = applySiteOffset( moment.utc( startDate ) ).endOf( 'month' ).valueOf();
+
 		return (
 			<Main wideLayout>
 				<QueryRewindStatus siteId={ siteId } />
-				<QueryActivityLog siteId={ siteId } />
+				<QueryActivityLog siteId={ siteId } dateStart={ queryStart } dateEnd={ queryEnd } />
 				<QuerySiteSettings siteId={ siteId } />
 				<StatsFirstView />
 				<SidebarNavigation />
