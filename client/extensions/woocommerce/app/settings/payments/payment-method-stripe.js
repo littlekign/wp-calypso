@@ -8,6 +8,7 @@ import { localize } from 'i18n-calypso';
 /**
  * Internal dependencies
  */
+import APIKeysView from 'woocommerce/components/api-keys-view';
 import Dialog from 'components/dialog';
 import ControlItem from 'components/segmented-control/item';
 import FormFieldset from 'components/forms/form-fieldset';
@@ -63,52 +64,45 @@ class PaymentMethodStripe extends Component {
 		};
 	}
 
-	renderEditTextboxSecretKey = ( setting ) => {
-		const { translate } = this.props;
-		return (
-			<FormTextInput
-				name={ setting.id }
-				onChange={ this.onEditFieldHandler }
-				value={ setting.value }
-				placeholder={ translate( 'Enter your secret key from your Stripe.com account' ) } />
-		);
-	}
-
-	renderEditTextboxPublishableKey = ( setting ) => {
-		const { translate } = this.props;
-		return (
-			<FormTextInput
-				name={ setting.id }
-				onChange={ this.onEditFieldHandler }
-				value={ setting.value }
-				placeholder={ translate( 'Enter your publishable key from your Stripe.com account' ) } />
-		);
-	}
-
 	renderKeyFields = ( isLiveMode ) => {
 		const { method, translate } = this.props;
-		const secretLabel = isLiveMode ? translate( 'Live Secret Key' ) : translate( 'Test Secret Key' );
-		const publishableLabel = isLiveMode ? translate( 'Live Publishable Key' ) : translate( 'Test Publishable Key' );
+
+		let keys = [];
+
+		if ( isLiveMode ) {
+			keys = [
+				{
+					id: 'secret_key',
+					label: translate( 'Live Secret Key' ),
+					placeholder: translate( 'Enter your secret key from your Stripe.com account' ),
+					value: method.settings.secret_key.value,
+				},
+				{
+					id: 'publishable_key',
+					label: translate( 'Live Publishable Key' ),
+					placeholder: translate( 'Enter your publishable key from your Stripe.com account' ),
+					value: method.settings.publishable_key.value,
+				}
+			];
+		} else {
+			keys = [
+				{
+					id: 'test_secret_key',
+					label: translate( 'Test Secret Key' ),
+					placeholder: translate( 'Enter your secret key from your Stripe.com account' ),
+					value: method.settings.test_secret_key.value,
+				},
+				{
+					id: 'test_publishable_key',
+					label: translate( 'Test Publishable Key' ),
+					placeholder: translate( 'Enter your publishable key from your Stripe.com account' ),
+					value: method.settings.test_publishable_key.value,
+				}
+			];
+		}
 
 		return (
-			<div>
-				<FormFieldset className="payments__method-edit-field-container">
-					<FormLabel>
-						{ secretLabel }
-					</FormLabel>
-					{ this.renderEditTextboxSecretKey(
-						isLiveMode ? method.settings.secret_key : method.settings.test_secret_key
-					) }
-				</FormFieldset>
-				<FormFieldset className="payments__method-edit-field-container">
-					<FormLabel>
-						{ publishableLabel }
-					</FormLabel>
-					{ this.renderEditTextboxPublishableKey(
-						isLiveMode ? method.settings.publishable_key : method.settings.test_publishable_key
-					) }
-				</FormFieldset>
-			</div>
+			<APIKeysView keys={ keys } onEdit={ this.onEditFieldHandler } />
 		);
 	}
 
