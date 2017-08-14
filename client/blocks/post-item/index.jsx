@@ -22,6 +22,11 @@ class PostItem extends React.Component {
 
 	constructor( props ) {
 		super( props );
+		this.state = { showShare: false };
+	}
+
+	toggleShare = () => {
+		this.setState( { showShare: ! this.state.showShare } );
 	}
 
 	render() {
