@@ -2,24 +2,27 @@
  * External dependencies
  */
 import React from 'react';
+import createReactClass from 'create-react-class';
 import debugFactory from 'debug';
 import { connect } from 'react-redux';
+import { localize } from 'i18n-calypso';
 
 const debug = debugFactory( 'calypso:me:sidebar' );
 
 /**
  * Internal dependencies
  */
-const Sidebar = require( 'layout/sidebar' ),
-	SidebarFooter = require( 'layout/sidebar/footer' ),
-	SidebarHeading = require( 'layout/sidebar/heading' ),
-	SidebarItem = require( 'layout/sidebar/item' ),
-	SidebarMenu = require( 'layout/sidebar/menu' ),
-	config = require( 'config' ),
-	ProfileGravatar = require( 'me/profile-gravatar' ),
-	eventRecorder = require( 'me/event-recorder' ),
-	user = require( 'lib/user' )(),
-	userUtilities = require( 'lib/user/utils' );
+import Sidebar from 'layout/sidebar';
+import SidebarFooter from 'layout/sidebar/footer';
+import SidebarHeading from 'layout/sidebar/heading';
+import SidebarItem from 'layout/sidebar/item';
+import SidebarMenu from 'layout/sidebar/menu';
+import config from 'config';
+import ProfileGravatar from 'me/profile-gravatar';
+import eventRecorder from 'me/event-recorder';
+import userFactory from 'lib/user';
+import userUtilities from 'lib/user/utils';
+const user = userFactory();
 
 import Button from 'components/button';
 import purchasesPaths from 'me/purchases/paths';
@@ -27,8 +30,12 @@ import { setNextLayoutFocus } from 'state/ui/layout-focus/actions';
 import { getCurrentUser } from 'state/current-user/selectors';
 import { logoutUser } from 'state/login/actions';
 
-const MeSidebar = React.createClass( {
+// TODO: Convert to React.Component
+/* eslint-disable react/prefer-es6-class */
+const MeSidebar = createReactClass( {
+	displayName: 'MeSidebar',
 
+	// TODO: Remove dependency on following mixin
 	mixins: [ eventRecorder ],
 
 	componentDidMount: function() {
@@ -66,12 +73,15 @@ const MeSidebar = React.createClass( {
 	},
 
 	render: function() {
-		const { context } = this.props;
+		const {
+			context,
+			translate,
+		} = this.props;
 		const filterMap = {
 			'/me': 'profile',
-			'/me/security/two-step': 'security',
-			'/me/security/connected-applications': 'security',
 			'/me/security/account-recovery': 'security',
+			'/me/security/connected-applications': 'security',
+			'/me/security/two-step': 'security',
 			'/me/notifications/comments': 'notifications',
 			'/me/notifications/updates': 'notifications',
 			'/me/notifications/subscriptions': 'notifications',
@@ -99,23 +109,23 @@ const MeSidebar = React.createClass( {
 		return (
 			<Sidebar>
 				<ProfileGravatar user={ this.props.currentUser } />
-				<div className="me-sidebar__signout">
+				<div className="me-sidebar__signout sidebar__signout">
 					<Button
 						compact
-						className="me-sidebar__signout-button"
+						className="me-sidebar__signout-button sidebar__signout-button"
 						onClick={ this.onSignOut }
-						title={ this.translate( 'Sign out of WordPress.com', { textOnly: true } ) }
+						title={ translate( 'Sign out of WordPress.com', { textOnly: true } ) }
 					>
-						{ this.translate( 'Sign Out' ) }
+						{ translate( 'Sign Out' ) }
 					</Button>
 				</div>
 				<SidebarMenu>
-					<SidebarHeading>{ this.translate( 'Profile' ) }</SidebarHeading>
+					<SidebarHeading>{ translate( 'Profile' ) }</SidebarHeading>
 					<ul>
 						<SidebarItem
 							selected={ selected === 'profile' }
 							link={ config.isEnabled( 'me/my-profile' ) ? '/me' : '//wordpress.com/me/public-profile' }
-							label={ this.translate( 'My Profile' ) }
+							label={ translate( 'My Profile' ) }
 							icon="user"
 							onNavigate={ this.onNavigate }
 						/>
@@ -123,7 +133,7 @@ const MeSidebar = React.createClass( {
 						<SidebarItem
 							selected={ selected === 'account' }
 							link={ config.isEnabled( 'me/account' ) ? '/me/account' : '//wordpress.com/me/account' }
-							label={ this.translate( 'Account Settings' ) }
+							label={ translate( 'Account Settings' ) }
 							icon="cog"
 							onNavigate={ this.onNavigate }
 							preloadSectionName="account"
@@ -132,7 +142,7 @@ const MeSidebar = React.createClass( {
 						<SidebarItem
 							selected={ selected === 'purchases' }
 							link={ purchasesPaths.purchasesRoot() }
-							label={ this.translate( 'Manage Purchases' ) }
+							label={ translate( 'Manage Purchases' ) }
 							icon="credit-card"
 							onNavigate={ this.onNavigate }
 							preloadSectionName="purchases"
@@ -141,7 +151,7 @@ const MeSidebar = React.createClass( {
 						<SidebarItem
 							selected={ selected === 'security' }
 							link={ '/me/security' }
-							label={ this.translate( 'Security' ) }
+							label={ translate( 'Security' ) }
 							icon="lock"
 							onNavigate={ this.onNavigate }
 							preloadSectionName="security"
@@ -150,7 +160,7 @@ const MeSidebar = React.createClass( {
 						<SidebarItem
 							selected={ selected === 'notifications' }
 							link={ config.isEnabled( 'me/notifications' ) ? '/me/notifications' : '//wordpress.com/me/notifications' }
-							label={ this.translate( 'Notification Settings' ) }
+							label={ translate( 'Notification Settings' ) }
 							icon="bell"
 							onNavigate={ this.onNavigate }
 							preloadSectionName="notification-settings"
@@ -159,12 +169,12 @@ const MeSidebar = React.createClass( {
 					</ul>
 				</SidebarMenu>
 				<SidebarMenu>
-					<SidebarHeading>{ this.translate( 'Special' ) }</SidebarHeading>
+					<SidebarHeading>{ translate( 'Special' ) }</SidebarHeading>
 					<ul>
 						<SidebarItem
 							selected={ selected === 'get-apps' }
 							link={ '/me/get-apps' }
-							label={ this.translate( 'Get Apps' ) }
+							label={ translate( 'Get Apps' ) }
 							icon="my-sites"
 							onNavigate={ this.onNavigate }
 						/>
@@ -183,7 +193,7 @@ const MeSidebar = React.createClass( {
 				<SidebarItem
 					selected={ selected === 'next' }
 					link="/me/next"
-					label={ this.translate( 'Next Steps' ) }
+					label={ this.props.translate( 'Next Steps' ) }
 					icon="list-checkmark"
 					onNavigate={ this.onNavigate }
 				/>
@@ -198,4 +208,6 @@ function mapStateToProps( state ) {
 	};
 }
 
-export default connect( mapStateToProps, { logoutUser, setNextLayoutFocus } )( MeSidebar );
+export default connect( mapStateToProps, { logoutUser, setNextLayoutFocus } )(
+	localize( MeSidebar )
+);
