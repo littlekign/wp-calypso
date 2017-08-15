@@ -18,19 +18,22 @@ import ReauthRequired from 'me/reauth-required';
 import SecuritySectionNav from 'me/security-section-nav';
 import twoStepAuthorization from 'lib/two-step-authorization';
 
-module.exports = React.createClass( {
+class Security extends React.Component {
+	static displayName = 'Security';
 
-	displayName: 'Security',
+	static propTypes = {
+		translate: PropTypes.func.isRequired,
+	}
 
-	componentDidMount: function() {
+	componentDidMount() {
 		debug( this.constructor.displayName + ' React component is mounted.' );
-	},
+	}
 
-	componentWillUnmount: function() {
+	componentWillUnmount() {
 		debug( this.constructor.displayName + ' React component is unmounting.' );
-	},
+	}
 
-	render: function() {
+	render() {
 		return (
 			<Main className="security">
 				<MeSidebarNavigation />
@@ -38,9 +41,9 @@ module.exports = React.createClass( {
 				<SecuritySectionNav path={ this.props.path } />
 
 				<ReauthRequired twoStepAuthorization={ twoStepAuthorization } />
-				<Card className="me-security-settings">
+				<Card className="me-security-settings security__settings">
 					<p>
-						{ this.translate(
+						{ this.props.translate(
 							'To update your password enter a new one below. Your password should be at least six characters long. ' +
 							'To make it stronger, use upper and lower case letters, numbers and symbols like ! " ? $ % ^ & ).'
 						) }
@@ -54,4 +57,6 @@ module.exports = React.createClass( {
 			</Main>
 		);
 	}
-} );
+}
+
+export default localize( Security );

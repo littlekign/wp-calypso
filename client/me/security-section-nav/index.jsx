@@ -13,56 +13,59 @@ import NavItem from 'components/section-nav/item';
 import NavTabs from 'components/section-nav/tabs';
 import SectionNav from 'components/section-nav';
 
-module.exports = React.createClass( {
-	propTypes: {
-		path: React.PropTypes.string.isRequired
-	},
+class SecuritySectionNav extends React.Component {
+	static displayName = 'SecuritySectionNav';
+	static propTypes = {
+		path: PropTypes.string.isRequired,
+		translate: PropTypes.func.isRequired,
+	};
 
-	getNavtabs: function() {
-		var tabs = [
+	getNavtabs = () => {
+		const { translate } = this.props;
+		const tabs = [
 			{
-				title: i18n.translate( 'Password', { textOnly: true } ),
+				title: translate( 'Password', { textOnly: true } ),
 				path: '/me/security',
 			},
 			{
-				title: i18n.translate( 'Two-Step Authentication', { textOnly: true } ),
+				title: translate( 'Two-Step Authentication', { textOnly: true } ),
 				path: '/me/security/two-step',
 			},
 			{
-				title: i18n.translate( 'Connected Applications', { textOnly: true } ),
+				title: translate( 'Connected Applications', { textOnly: true } ),
 				path: '/me/security/connected-applications',
 			},
 			{
-				title: i18n.translate( 'Account Recovery', { textOnly: true } ),
+				title: translate( 'Account Recovery', { textOnly: true } ),
 				path: '/me/security/account-recovery',
 			},
 		];
 
 		return tabs;
-	},
+	};
 
-	getFilteredPath: function() {
-		var paramIndex = this.props.path.indexOf( '?' );
+	getFilteredPath = () => {
+		const paramIndex = this.props.path.indexOf( '?' );
 		return ( paramIndex < 0 ) ? this.props.path : this.props.path.substring( 0, paramIndex );
-	},
+	};
 
-	getSelectedText: function() {
-		var text = '',
-			filteredPath = this.getFilteredPath(),
-			found = find( this.getNavtabs(), { path: filteredPath } );
+	getSelectedText = () => {
+		let text = '';
+		const filteredPath = this.getFilteredPath();
+		const found = find( this.getNavtabs(), { path: filteredPath } );
 
 		if ( 'undefined' !== typeof found ) {
 			text = found.title;
 		}
 
 		return text;
-	},
+	};
 
-	onClick: function() {
+	onClick = () => {
 		window.scrollTo( 0, 0 );
-	},
+	};
 
-	render: function() {
+	render() {
 		return (
 			<SectionNav selectedText={ this.getSelectedText() }>
 				<NavTabs>
@@ -82,4 +85,6 @@ module.exports = React.createClass( {
 			</SectionNav>
 		);
 	}
-} );
+}
+
+export default localize( SecuritySectionNav );
