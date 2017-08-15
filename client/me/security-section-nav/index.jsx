@@ -28,11 +28,16 @@ class SecuritySectionNav extends React.Component {
 				path: '/me/security',
 			},
 			{
+				title: translate( 'Social Login', { textOnly: true } ),
+				path: '/me/security/social-login',
+			},
+			{
 				title: translate( 'Two-Step Authentication', { textOnly: true } ),
 				path: '/me/security/two-step',
 			},
 			{
-				title: translate( 'Connected Applications', { textOnly: true } ),
+				// This was shortened from 'Connected Applications' due to space constraints.
+				title: translate( 'Connected Apps', { textOnly: true } ),
 				path: '/me/security/connected-applications',
 			},
 			{
