@@ -12,6 +12,7 @@ const debug = debugFactory( 'calypso:me:security:password' );
  */
 import AccountPassword from 'me/account-password';
 import Card from 'components/card';
+import DocumentHead from 'components/data/document-head';
 import Main from 'components/main';
 import MeSidebarNavigation from 'me/sidebar-navigation';
 import ReauthRequired from 'me/reauth-required';
@@ -34,8 +35,11 @@ class Security extends React.Component {
 	}
 
 	render() {
+		const title = this.props.translate( 'Password', { textOnly: true } );
+
 		return (
 			<Main className="security">
+				<DocumentHead title={ title } />
 				<MeSidebarNavigation />
 
 				<SecuritySectionNav path={ this.props.path } />
