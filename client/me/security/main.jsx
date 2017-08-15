@@ -1,19 +1,22 @@
 /**
  * External dependencies
  */
-var React = require( 'react' ),
-	debug = require( 'debug' )( 'calypso:me:security:password' );
+import debugFactory from 'debug';
+import PropTypes from 'prop-types';
+import React from 'react';
+import { localize } from 'i18n-calypso';
+const debug = debugFactory( 'calypso:me:security:password' );
 
 /**
  * Internal dependencies
  */
-var MeSidebarNavigation = require( 'me/sidebar-navigation' ),
-	Card = require( 'components/card' ),
-	AccountPassword = require( 'me/account-password' ),
-	ReauthRequired = require( 'me/reauth-required' ),
-	twoStepAuthorization = require( 'lib/two-step-authorization' ),
-	SecuritySectionNav = require( 'me/security-section-nav' ),
-	Main = require( 'components/main' );
+import AccountPassword from 'me/account-password';
+import Card from 'components/card';
+import Main from 'components/main';
+import MeSidebarNavigation from 'me/sidebar-navigation';
+import ReauthRequired from 'me/reauth-required';
+import SecuritySectionNav from 'me/security-section-nav';
+import twoStepAuthorization from 'lib/two-step-authorization';
 
 module.exports = React.createClass( {
 

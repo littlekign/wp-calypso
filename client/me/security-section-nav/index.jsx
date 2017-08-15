@@ -1,16 +1,17 @@
 /**
  * External dependencies
  */
-var React = require( 'react' ),
-	i18n = require( 'i18n-calypso' ),
-	find = require( 'lodash/find' );
+import PropTypes from 'prop-types';
+import React from 'react';
+import { find } from 'lodash';
+import { localize } from 'i18n-calypso';
 
 /**
  * Internal dependencies
  */
-var SectionNav = require( 'components/section-nav' ),
-	NavTabs = require( 'components/section-nav/tabs' ),
-	NavItem = require( 'components/section-nav/item' );
+import NavItem from 'components/section-nav/item';
+import NavTabs from 'components/section-nav/tabs';
+import SectionNav from 'components/section-nav';
 
 module.exports = React.createClass( {
 	propTypes: {
