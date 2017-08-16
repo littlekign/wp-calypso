@@ -193,9 +193,9 @@ class SimplePaymentsDialog extends Component {
 		return new Promise( resolve => {
 			const { translate } = this.props;
 			accept(
-				translate( 'There are unsaved changes. Do you really want to close this dialog?' ),
+				translate( 'Wait! You have unsaved changes. Do you really want to discard them?' ),
 				resolve,
-				translate( 'Close' ),
+				translate( 'Discard' ),
 				null,
 				{
 					isScary: true,
