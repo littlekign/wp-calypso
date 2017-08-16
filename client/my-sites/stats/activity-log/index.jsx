@@ -10,8 +10,9 @@ import {
 	get,
 	groupBy,
 	includes,
-	map,
 	isEmpty,
+	isNull,
+	map,
 } from 'lodash';
 
 /**
@@ -28,6 +29,7 @@ import SidebarNavigation from 'my-sites/sidebar-navigation';
 import StatsNavigation from '../stats-navigation';
 import ActivityLogConfirmDialog from '../activity-log-confirm-dialog';
 import ActivityLogDay from '../activity-log-day';
+import ActivityLogDayPlaceholder from '../activity-log-day/placeholder';
 import ActivityLogBanner from '../activity-log-banner';
 import ErrorBanner from '../activity-log-banner/error-banner';
 import ProgressBanner from '../activity-log-banner/progress-banner';
@@ -253,6 +255,16 @@ class ActivityLog extends Component {
 			slug,
 			startDate,
 		} = this.props;
+
+		if ( isNull( logs ) ) {
+			return (
+				<div>
+					<ActivityLogDayPlaceholder />
+					<ActivityLogDayPlaceholder />
+					<ActivityLogDayPlaceholder />
+				</div>
+			);
+		}
 
 		const disableRestore = this.isRestoreInProgress();
 
